@@ -13,14 +13,14 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-13, macos-latest]
-        # os: [windows-latest, ubuntu-latest, macos-13, macos-latest, windows-11-arm]
+        os: [windows-latest, ubuntu-latest, macos-15-intel, macos-latest]
+        # os: [windows-latest, ubuntu-latest, macos-15-intel, macos-latest, windows-11-arm]
         include:
           - os: windows-latest
             build: BHYG-Windows.exe
           - os: ubuntu-latest
             build: BHYG-Linux
-          - os: macos-13
+          - os: macos-15-intel
             build: BHYG-macOS-Intel
           - os: macos-latest
             build: BHYG-macOS-Apple_Silicon
@@ -33,14 +33,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: biliticket/SB
+          repository: https://git.origami.pub/LightXi-BHYG/SB
           token: ${{ secrets.SBCI_TOKEN }}
 
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.14
 
       - name: Install dependencies
         run: pip install -r requirements.txt
