@@ -31,13 +31,8 @@ jobs:
       version: ${{ github.ref_name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: LightXi-BHYG/SB
-          token: ${{ secrets.SBCI_TOKEN }}
-          github-server-url: https://git.origami.pub
-          ref: ${{ github.ref_name }}
-
+        run: |
+          git clone https://ZianTT:${{ secrets.SBCI_TOKEN }}@git.origami.pub/LightXi-BHYG/SB
 
       - name: Setup Python
         uses: actions/setup-python@v5
