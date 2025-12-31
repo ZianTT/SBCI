@@ -36,6 +36,7 @@ jobs:
           repository: LightXi-BHYG/SB
           token: ${{ secrets.SBCI_TOKEN }}
           github-server-url: https://git.origami.pub
+          ref: ${{ github.ref_name }}
 
 
       - name: Setup Python
