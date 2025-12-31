@@ -33,8 +33,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: https://git.origami.pub/LightXi-BHYG/SB
+          repository: LightXi-BHYG/SB
           token: ${{ secrets.SBCI_TOKEN }}
+          github-server-url: https://git.origami.pub
 
 
       - name: Setup Python
