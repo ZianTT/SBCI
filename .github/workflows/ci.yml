@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone https://ZianTT:${{ secrets.SBCI_TOKEN }}@git.origami.pub/LightXi-BHYG/SB && cd SB
+          git clone https://ZianTT:${{ secrets.SBCI_TOKEN }}@git.origami.pub/LightXi-BHYG/SB
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -41,16 +41,20 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+        working-directory: ./SB
 
       - name: Install Cython
         run: pip install Cython
+        working-directory: ./SB
 
       - name: Run Cython
         run: python cythonize.py build_ext --inplace
+        working-directory: ./SB
 
       - name: Remove source code
         if: matrix.os == 'windows-latest'
         run: |
+          cd SB
           del api.py
           del main.py
           del bilibili_util.py
