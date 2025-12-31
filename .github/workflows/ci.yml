@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone https://ZianTT:${{ secrets.SBCI_TOKEN }}@git.origami.pub/LightXi-BHYG/SB
+          git clone https://ZianTT:${{ secrets.SBCI_TOKEN }}@git.origami.pub/LightXi-BHYG/SB && cd SB
 
       - name: Setup Python
         uses: actions/setup-python@v5
