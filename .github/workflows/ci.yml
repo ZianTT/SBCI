@@ -37,7 +37,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.14
+          python-version: 3.13
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -47,31 +47,15 @@ jobs:
         run: pip install Cython
         working-directory: ./SB
 
-      - name: Run Cython
-        run: python cythonize.py build_ext --inplace
-        working-directory: ./SB
-
-      - name: Remove source code
-        if: matrix.os == 'windows-latest'
-        run: |
-          cd SB
-          del api.py
-          del main.py
-          del bilibili_util.py
-
-      - name: Remove source code
-        if: matrix.os != 'windows-latest'
-        run: cd SB && rm api.py main.py bilibili_util.py
-
       - name: Build Binary
-        run: pyinstaller main.spec
+        run: python -m nuitka loader.py  --standalone --onefile --static-libpython=no --output-filename={{ github.ref_name }}-${{ matrix.build }}
         working-directory: ./SB
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.ref_name }}-${{ matrix.build }}
-          path: SB/dist/${{ github.ref_name }}-${{ matrix.build }}
+          path: SB/${{ github.ref_name }}-${{ matrix.build }}
 
       - name: Upload Release
         uses: softprops/action-gh-release@v2
