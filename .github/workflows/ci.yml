@@ -48,7 +48,7 @@ jobs:
         working-directory: ./SB
 
       - name: Build Binary
-        run: python -m nuitka loader.py  --standalone --onefile --static-libpython=no --output-filename=${{ github.ref_name }}-${{ matrix.build }}
+        run: python -m nuitka loader.py  --standalone --onefile -y --output-filename=${{ github.ref_name }}-${{ matrix.build }}
         working-directory: ./SB
 
       - name: Upload Artifacts
