@@ -48,7 +48,7 @@ jobs:
         working-directory: ./SB
 
       - name: Build Binary
-        run: python -m nuitka loader.py  --standalone --onefile --assume-yes-for-downloads --include-data-dir=./locale=locale --no-deployment-flag=self-execution --output-filename=${{ github.ref_name }}-${{ matrix.build }}
+        run: python -m nuitka loader.py  --standalone --onefile --assume-yes-for-downloads --static-libpython=yes --include-data-dir=./locale=locale --no-deployment-flag=self-execution --output-filename=${{ github.ref_name }}-${{ matrix.build }}
         working-directory: ./SB
 
       - name: Upload Artifacts
