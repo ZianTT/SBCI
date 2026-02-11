@@ -48,6 +48,7 @@ jobs:
         working-directory: ./SB
 
       - name: Build Binary
+        shell: bash
         run: |
           ARGS="loader.py --standalone --onefile --assume-yes-for-downloads --include-data-dir=./locale=locale --no-deployment-flag=self-execution --output-filename=${{ github.ref_name }}-${{ matrix.build }}"
   
