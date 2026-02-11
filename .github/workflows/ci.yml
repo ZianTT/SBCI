@@ -47,8 +47,15 @@ jobs:
         run: pip install Cython
         working-directory: ./SB
 
-      - name: Build Binary
-        run: python -m nuitka loader.py  --standalone --onefile --assume-yes-for-downloads --static-libpython=yes --include-data-dir=./locale=locale --no-deployment-flag=self-execution --output-filename=${{ github.ref_name }}-${{ matrix.build }}
+      - name: Build Binary (Not Windows)
+        run: |
+          ARGS="loader.py --standalone --onefile --assume-yes-for-downloads --include-data-dir=./locale=locale --no-deployment-flag=self-execution --output-filename=${{ github.ref_name }}-${{ matrix.build }}"
+  
+          if [ "${{ runner.os }}" != "Windows" ]; then
+            python -m nuitka $ARGS --static-libpython=yes
+          else
+            python -m nuitka $ARGS
+          fi
         working-directory: ./SB
 
       - name: Upload Artifacts
