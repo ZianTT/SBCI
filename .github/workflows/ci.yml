@@ -50,13 +50,9 @@ jobs:
       - name: Build Binary
         shell: bash
         run: |
-          ARGS="loader.py --standalone --onefile --assume-yes-for-downloads --include-data-dir=./locale=locale --no-deployment-flag=self-execution --output-filename=${{ github.ref_name }}-${{ matrix.build }}"
-  
-          if [ "${{ runner.os }}" != "Windows" ]; then
-            python -m nuitka $ARGS --static-libpython=yes
-          else
-            python -m nuitka $ARGS
-          fi
+          ARGS="loader.py --standalone --onefile --assume-yes-for-downloads --include-data-dir=./locale=locale --output-filename=${{ github.ref_name }}-${{ matrix.build }}"
+          
+          python -m nuitka $ARGS
         working-directory: ./SB
 
       - name: Upload Artifacts
