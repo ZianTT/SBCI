@@ -58,6 +58,8 @@ jobs:
           include-data-dir: ./locale=locale
           output-file: ${{ github.ref_name }}-${{ matrix.build }}
           working-directory: ./SB
+          include-package:
+            sentry_sdk.integrations
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
