@@ -18,12 +18,16 @@ jobs:
         include:
           - os: windows-latest
             build: BHYG-Windows.exe
+            bdist_client: Windows
           - os: ubuntu-22.04
             build: BHYG-Linux
+            bdist_client: Linux
           - os: macos-15-intel
             build: BHYG-macOS-Intel.bin
+            bdist_client: Mac(Intel)
           - os: macos-latest
             build: BHYG-macOS-Apple_Silicon.bin
+            bdist_client: Mac
           # - os: windows-11-arm
           #   build: BHYG-Windows-arm.exe
     runs-on: ${{ matrix.os }}
@@ -72,3 +76,21 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: SB/build/${{ github.ref_name }}-${{ matrix.build }}
+
+      - name: Upload to BDist
+        shell: bash
+        env:
+          BDIST_UPLOAD_URL: ${{ vars.BDIST_UPLOAD_URL || 'https://dist.rakuyoudesu.com/ci/upload' }}
+          BDIST_UPLOAD_TOKEN: ${{ secrets.BDIST_UPLOAD_TOKEN }}
+          BDIST_CLIENT: ${{ matrix.bdist_client }}
+          BDIST_FILENAME: ${{ github.ref_name }}-${{ matrix.build }}
+          BDIST_FILE: SB/build/${{ github.ref_name }}-${{ matrix.build }}
+        run: |
+          curl --fail-with-body --show-error --silent --location \
+            -X POST "$BDIST_UPLOAD_URL" \
+            -H "Authorization: Bearer $BDIST_UPLOAD_TOKEN" \
+            -F "client=$BDIST_CLIENT" \
+            -F "filename=$BDIST_FILENAME" \
+            -F "require_whitelist=true" \
+            -F "rsa_private_key=./internal.pem" \
+            -F "file=@$BDIST_FILE"
