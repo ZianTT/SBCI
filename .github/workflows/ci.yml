@@ -17,19 +17,19 @@ jobs:
         # os: [windows-latest, ubuntu-latest, macos-15-intel, macos-latest, windows-11-arm]
         include:
           - os: windows-latest
-            build: BHYG-Windows.exe
+            build: SB-Windows.exe
             bdist_client: Windows
           - os: ubuntu-22.04
-            build: BHYG-Linux
+            build: SB-Linux
             bdist_client: Linux
           - os: macos-15-intel
-            build: BHYG-macOS-Intel.bin
+            build: SB-macOS-Intel.bin
             bdist_client: Mac(Intel)
           - os: macos-latest
-            build: BHYG-macOS-Apple_Silicon.bin
+            build: SB-macOS-Apple_Silicon.bin
             bdist_client: Mac
           # - os: windows-11-arm
-          #   build: BHYG-Windows-arm.exe
+          #   build: SB-Windows-arm.exe
     runs-on: ${{ matrix.os }}
     env:
       version: ${{ github.ref_name }}
