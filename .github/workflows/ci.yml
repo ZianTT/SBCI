@@ -101,8 +101,8 @@ jobs:
 
             status=$?
             if [ "$attempt" -eq "$attempts" ]; then
-              echo "BDist upload failed after $attempts attempts"
-              exit "$status"
+              echo "::error::BDist upload failed after $attempts attempts; last curl exit code: $status"
+              exit 1
             fi
 
             sleep "$delay"
