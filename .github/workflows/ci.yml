@@ -66,12 +66,6 @@ jobs:
           include-package:
             sentry_sdk.integrations
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.ref_name }}-${{ matrix.build }}
-          path: SB/build/${{ github.ref_name }}-${{ matrix.build }}
-
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
