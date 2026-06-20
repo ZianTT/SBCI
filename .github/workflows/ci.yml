@@ -12,6 +12,7 @@ permissions:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-22.04, macos-15-intel, macos-latest]
         # os: [windows-latest, ubuntu-latest, macos-15-intel, macos-latest, windows-11-arm]
@@ -86,11 +87,30 @@ jobs:
           BDIST_FILENAME: ${{ github.ref_name }}-${{ matrix.build }}
           BDIST_FILE: SB/build/${{ github.ref_name }}-${{ matrix.build }}
         run: |
-          curl --fail-with-body --show-error --silent --location \
-            -X POST "$BDIST_UPLOAD_URL" \
-            -H "Authorization: Bearer $BDIST_UPLOAD_TOKEN" \
-            -F "client=$BDIST_CLIENT" \
-            -F "filename=$BDIST_FILENAME" \
-            -F "require_whitelist=true" \
-            -F "rsa_private_key=./internal.pem" \
-            -F "file=@$BDIST_FILE"
+          attempts=5
+          delay=10
+
+          for attempt in $(seq 1 "$attempts"); do
+            echo "Uploading $BDIST_FILENAME to BDist (attempt $attempt/$attempts)"
+            if curl --fail-with-body --show-error --silent --location --http1.1 \
+              --connect-timeout 30 \
+              --max-time 600 \
+              -X POST "$BDIST_UPLOAD_URL" \
+              -H "Authorization: Bearer $BDIST_UPLOAD_TOKEN" \
+              -F "client=$BDIST_CLIENT" \
+              -F "filename=$BDIST_FILENAME" \
+              -F "require_whitelist=true" \
+              -F "rsa_private_key=./internal.pem" \
+              -F "file=@$BDIST_FILE"; then
+              exit 0
+            fi
+
+            status=$?
+            if [ "$attempt" -eq "$attempts" ]; then
+              echo "BDist upload failed after $attempts attempts"
+              exit "$status"
+            fi
+
+            sleep "$delay"
+            delay=$((delay * 2))
+          done
